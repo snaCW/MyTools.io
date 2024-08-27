@@ -1,20 +1,13 @@
-function fetchJSONData(path)
-{
-    fetch(path)
-    .then((res) => {
-        if (!res.ok)
-        {
-            throw new Error("HTTP error! Status: ${res.status}");
-        }
-        return res.json();
-    })
-    .then((data) => console.log(data))
-    .catch((error) => console.error("Unable to fetch data:", error));
+const sideMenu = document.getElementById("sideMenu");
+
+async function fetchJSONData(path) {
+    const responce = await fetch(path);
+    const json = await responce.json();
+    return json;
 }
-function loadSideNavOptions()
-{
-    document.getElementById("sideMenu").innerHTML = `<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>`;
-    pages = fetchJSONData("pages.json");
+async function loadSideNavOptions() {
+    sideMenu.innerHTML = `<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>`;
+    const pages = await fetchJSONData("pages.json");
     pages.forEach(page => {
         pagePath = page[0].path;
         pageName = page[0].name;
@@ -22,13 +15,11 @@ function loadSideNavOptions()
     });
 }
 
-function openNav()
-{
+function openNav() {
     loadSideNavOptions();
     document.getElementById("sideMenu").style.width = "250px";
 }
 
-function closeNav()
-{
+function closeNav() {
     document.getElementById("sideMenu").style.width = "0px";
 }
