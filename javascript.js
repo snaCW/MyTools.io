@@ -22,3 +22,21 @@ async function openNav() {
 function closeNav() {
     document.getElementById("sideMenu").style.width = "0px";
 }
+
+function updateLocalStoragePages {
+    const jsonPages = await fetchJSONData("pages.json");
+    if (localStorage.getItem("pages") === null) {
+        localStorage.setItem("pages", JSON.stringify(jsonPages));
+        return;
+    }
+    
+    const localStoragePages = JSON.parse(localStorage.getItem("pages"));
+    for (int i = 0; i < jsonPages.length(); i++) {
+        
+    }
+    
+    jsonPages.forEach(jsonPage => {
+        let pageFound = false;
+        localStoragePages.forEach
+    });
+}
