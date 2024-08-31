@@ -1,10 +1,12 @@
-{
-    "pages":
-    [
-        {
-            "path": "internet/internet-management",
-            "name": "مدیریت اینترنت",
-            "usage-count": 0
-        }
-    ]
-}
+[
+    {
+        "Path": "internet/internet-management.html",
+        "Name": "مدیریت اینترنت",
+        "UsageCount": 0
+    },
+    {
+        "Path": "games/server-reset.html",
+        "Name": "ریست سرور گیم",
+        "UsageCount": 0
+    }
+]
