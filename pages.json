@@ -8,5 +8,10 @@
         "Path": "games/server-reset.html",
         "Name": "ریست سرور گیم",
         "UsageCount": 0
+    },
+    {
+        "Path": "games/energy-recovery.html",
+        "Name": "ریکاوری انرژی گیم",
+        "UsageCount": 0
     }
 ]
