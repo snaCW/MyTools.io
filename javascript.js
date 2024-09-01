@@ -9,18 +9,20 @@ async function fetchJSONData(path) {
 
 async function loadPagesLinks() {
     sideMenu.innerHTML = `<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>`;
-    const pages = JSON.parse(localStorage.getItem("pages"));
-    pages.sort((a, b) => b.UsageCount - a.UsageCount);
+    let pages = await getLocalStoragePages();
+    
+    for (let i = 0; i < pages.length; i++) {
+        sideMenu.innerHTML += `<button type="button" onclick="openPage(${i})">${pages[i].Name}</button>`;
+    }
 
     let pagesAddedToQuickMenu = 0;
-    pages.forEach(page => {
-        sideMenu.innerHTML += `<a href="${page.Path}" class="sideMenuButton" onclick="increasePageUsageCount(this)">${page.Name}</a>`;
-
-        if (pagesAddedToQuickMenu < 4) {
-            quickMenu.innerHTML += `<a href="${page.Path}" class="quickMenuButton" onclick="increasePageUsageCount(this)">${page.Name}</a>`;
+    pages.sort((a, b) => b.UsageCount - a.UsageCount);
+    for (let i = 0; i < pages.length; i++) {
+        if (pagesAddedToQuickMenu < 2) {
+            quickMenu.innerHTML += `<button type="button" onclick="openPage(${i})">${pages[i].Name}</button>`;
             pagesAddedToQuickMenu++;
         }
-    });
+    }
 }
 
 function openNav() {
@@ -32,49 +34,40 @@ function closeNav() {
 }
 
 async function updateLocalStoragePages() {
-    const jsonPages = await fetchJSONData("pages.json");
-    if (localStorage.getItem("pages") === null) {
-        localStorage.setItem("pages", JSON.stringify(jsonPages));
-        return;
-    }
-    
-    let localStoragePages = JSON.parse(localStorage.getItem("pages"));
+    let jsonPages = await fetchJSONData("pages.json");
 
-    let indexesToAdd = [];
-    for (let i = 0; i < jsonPages.length; i++) {
-        let isPageFound = false;
+    if (localStorage.getItem("pages") !== null) {
+        const localStoragePages = JSON.parse(localStorage.getItem("pages"));
 
-        for (let j = 0; j < localStoragePages.length; j++) {
-            if (jsonPages[i].Name == localStoragePages[j].Name) {
-                isPageFound = true;
-
-                localStoragePages[j].Path = jsonPages[i].Path;
-                break;
+        for (let i = 0; i < jsonPages.length; i++) {
+            for (let j = 0; j < localStoragePages.length; j++) {
+                if (jsonPages[i].Name == localStoragePages[j].Name) {
+                    
+                    jsonPages[i].UsageCount = localStoragePages[j].UsageCount;
+                    break;
+                }
             }
         }
-
-        if (!isPageFound) {
-            indexesToAdd.push(i);
-        }
     }
     
-    indexesToAdd.forEach(index => {
-        localStoragePages.push(jsonPages[index]);
-    });
-    localStorage.setItem("pages", JSON.stringify(localStoragePages));
+    await setLocalStoragePages(jsonPages);
 }
 
-async function increasePageUsageCount(pageClicked) {
-    const pages = JSON.parse(localStorage.getItem("pages"));
-    for (let i = 0; i < pages.length(); i++) {
-        if (pages[i].Name == pageClicked.innerText) {
-            pages[i].UsageCount++;
-            break;
-        }
-    }
-    localStorage.setItem("pages", JSON.stringify(localStoragePages));
+async function openPage(pageIndex) {
+    let pages = await getLocalStoragePages();
+    pages[pageIndex].UsageCount++;
+    await setLocalStoragePages(pages);
+    open(pages[pageIndex].Path);
 }
 
 async function resetPagesUsageCount() {
-    localStorage.setItem("pages", JSON.stringify(await fetchJSONData("pages.json")));
+    await setLocalStoragePages(await fetchJSONData("pages.json"));
+}
+
+async function setLocalStoragePages(array) {
+    localStorage.setItem("pages", JSON.stringify(array));
+}
+
+async function getLocalStoragePages() {
+    return await JSON.parse(localStorage.getItem("pages"));
 }

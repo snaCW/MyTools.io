@@ -40,11 +40,12 @@ h1 {
     .sideNav a { font-size: 18px; }
 }
 
-a.quickMenuButton {
+.quickMenu a {
     padding: 1px 6px;
     border: 1px outset greenyellow;
     border-radius: 3px;
     color: white;
     background-color: grey;
     text-decoration: none;
+    display: inline-block;
 }
