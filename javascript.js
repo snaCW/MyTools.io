@@ -41,10 +41,10 @@ async function updateLocalStoragePages() {
     let localStoragePages = JSON.parse(localStorage.getItem("pages"));
 
     let indexesToAdd = [];
-    for (let i = 0; i < jsonPages.length(); i++) {
+    for (let i = 0; i < jsonPages.length; i++) {
         let isPageFound = false;
 
-        for (let j = 0; j < localStoragePages.length(); j++) {
+        for (let j = 0; j < localStoragePages.length; j++) {
             if (jsonPages[i].Name == localStoragePages[j].Name) {
                 isPageFound = true;
 
